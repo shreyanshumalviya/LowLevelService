@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LLD Projects | Shreyanshu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-900 text-white font-mono min-h-screen flex flex-col items-center justify-center p-8">
+
+<!-- Hero Section -->
+<div class="text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Hi, I'm Shreyanshu Malviya</h1>
+    <h2 class="text-2xl text-green-400">
+        <span id="typed-text"></span>
+    </h2>
+    <a href="#projects"
+       class="mt-8 inline-block bg-green-500 text-black px-6 py-2 rounded-full hover:bg-green-400 transition">View
+        Projects ↓</a>
+</div>
+
+<!-- Projects Section -->
+<div id="projects" class="mt-16 w-full max-w-4xl">
+    <h3 class="text-3xl mb-6 border-b border-gray-700 pb-2">LLD Projects</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div th:each="project : ${projects}" class="bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition">
+            <h4 class="text-xl font-semibold" th:text="${project.name}">Project Name</h4>
+            <p class="text-sm text-gray-400 mt-1">
+                <span th:text="${project.year}">2024</span> |
+                <span th:text="${project.stack}">Spring Boot, Redis</span>
+            </p>
+            <!-- Click to view methods -->
+            <a th:href="@{'/project/' + ${project.link}}"
+               class="text-green-400 text-sm mt-2 inline-block hover:underline">
+                Open →
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Typed.js -->
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new Typed("#typed-text", {
+            strings: [
+                "I design backend systems.",
+                "I architect scalable APIs.",
+                "I simplify complex domains."
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.make73.annotation_processor.lld_drivers;
 
-import com.make73.annotation_processor.ExposeClass;
-import com.make73.annotation_processor.ExposeMethod;
+import com.make73.annotation_processor.annotation.ExposeClass;
+import com.make73.annotation_processor.annotation.ExposeMethod;
 
 @ExposeClass
 public class Main {
@@ -10,7 +10,7 @@ public class Main {
 
     @ExposeMethod
     public String getName() {
-        return "Hello world!";
+        return "Hello " + name + "!";
     }
 
     @ExposeMethod

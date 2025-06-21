@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Methods for ' + ${projectName}">Project Methods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-mono p-8">
+
+<h1 class="text-3xl mb-6 text-green-400">Methods for "<span th:text="${projectName}">Main</span>"</h1>
+
+<div class="space-y-6 max-w-3xl mx-auto">
+    <div th:each="method, iStat : ${methods}" class="bg-gray-800 p-6 rounded shadow-lg">
+        <!-- Header -->
+        <div class="mb-4">
+            <p class="text-xl font-semibold text-blue-300">
+                <span th:text="${method.returnType != null ? method.returnType : 'void'}"></span>
+                <span th:text="${method.name}"></span>
+                (
+                <span th:each="parameter, iter : ${method.parameters}">
+                        <span th:text="${parameter.type} + ' ' + parameter.name"></span>
+                        <span th:if="${!iter.last}">, </span>
+                    </span>
+                )
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form th:attr="id=${'form-' + iStat.index}" th:onsubmit="'submitForm(event, ' + ${iStat.index} + ')'"
+              class="space-y-2">
+            <div th:each="parameter : ${method.parameters}" class="mb-2">
+                <label th:for="${parameter.key}" class="block text-sm text-gray-400"
+                       th:text="${parameter.name + ' (' + parameter.type + ')'}"></label>
+                <input th:attr="name=${parameter.key}, id=${parameter.key + '-' + iStat.index}"
+                       class="w-full p-2 rounded bg-gray-700 text-white" required/>
+            </div>
+            <button type="submit"
+                    th:attr="data-link=${method.link}, data-index=${iStat.index}"
+                    class="bg-green-500 hover:bg-green-400 text-black px-4 py-2 rounded">
+                Run Method
+            </button>
+        </form>
+
+        <!-- Output -->
+        <div th:attr="id=${'result-' + iStat.index}" class="mt-4 text-sm text-yellow-300 whitespace-pre-wrap"></div>
+    </div>
+</div>
+
+<a href="/" class="mt-8 inline-block text-blue-300 hover:underline">← Back to Projects</a>
+
+<!-- JavaScript -->
+<script src="/js/project.js" defer></script>
+</body>
+</html>
