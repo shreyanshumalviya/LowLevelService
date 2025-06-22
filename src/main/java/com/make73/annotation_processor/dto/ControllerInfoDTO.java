@@ -10,6 +10,8 @@ public class ControllerInfoDTO implements Serializable {
     private String year;
     private String stack;
     private String link;
+    private String description;
+
     private List<MethodInfoDTO> methods;
 
     public String getName() {
@@ -50,5 +52,13 @@ public class ControllerInfoDTO implements Serializable {
 
     public void setMethods(List<MethodInfoDTO> methods) {
         this.methods = methods;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

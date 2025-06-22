@@ -30,7 +30,7 @@
                 <span th:text="${project.stack}">Spring Boot, Redis</span>
             </p>
             <!-- Click to view methods -->
-            <a th:href="@{'/project/' + ${project.link}}"
+            <a th:href="@{${project.link}}"
                class="text-green-400 text-sm mt-2 inline-block hover:underline">
                 Open →
             </a>

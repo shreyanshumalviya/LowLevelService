@@ -8,4 +8,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
 public @interface ExposeClass {
+    // ToDo handle space in link, non unique links
+    // Required parameters
+    String name();
+    String link();
+    String year() default "";
+    String stack();
+    String description();
+
 }

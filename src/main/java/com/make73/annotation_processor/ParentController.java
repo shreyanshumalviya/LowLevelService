@@ -15,7 +15,7 @@ import java.util.Map;
 public class ParentController {
 
     private static List<ControllerInfoDTO> controllers = null;
-    private static Map<String, List<MethodInfoDTO>> methodsMap = null;
+    private static Map<String, ControllerInfoDTO> methodsMap = null;
 
     public static void saveControllersToFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(
@@ -36,7 +36,7 @@ public class ParentController {
         methodsMap = new java.util.HashMap<>();
         //populate methodsMap
         for (ControllerInfoDTO controller : controllers) {
-            methodsMap.put(controller.getName(), controller.getMethods());
+            methodsMap.put(controller.getName(), controller);
         }
     }
 
@@ -61,7 +61,7 @@ public class ParentController {
         return controllers;
     }
 
-    public static List<MethodInfoDTO> getMethodsForController(String controllerName) {
+    public static ControllerInfoDTO getMethodsForController(String controllerName) {
         if (controllers == null) {
             ParentController.loadControllersFromFile(); // Load saved state
         }

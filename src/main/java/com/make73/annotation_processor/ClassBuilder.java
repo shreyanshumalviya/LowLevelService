@@ -1,5 +1,9 @@
 package com.make73.annotation_processor;
 
+import com.make73.annotation_processor.annotation.ExposeClass;
+import com.make73.annotation_processor.annotation.ExposeMethod;
+import com.make73.annotation_processor.annotation.processor.utilities.MethodPackage;
+
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.VariableElement;
 import java.lang.reflect.Method;
@@ -8,19 +12,24 @@ import java.util.List;
 
 public class ClassBuilder {
     private String className;
+
+    ExposeClass exposeClass;
     private String controllerClassName;
 
-    private List<ExecutableElement> methods = new ArrayList<>();
+    private final List<MethodPackage> methods = new ArrayList<>();
 
-    public void setClassName(String className) {
+    public void setClassName(String className, ExposeClass exposeClass) {
         this.className = className;
-        this.controllerClassName = className + "Controller";
+        this.exposeClass = exposeClass;
+        // even if user enters space it is handled
+        this.controllerClassName = String.join("", exposeClass.link().split(" ")) + "Controller";
     }
 
-    public void addMethod(ExecutableElement method) {
-        methods.add(method);
+    public void addMethod(ExecutableElement method, ExposeMethod exposeMethod) {
+        methods.add(new MethodPackage(method, exposeMethod));
     }
-// classRef is the reference to class use it to call methods
+
+    // classRef is the reference to class use it to call methods
     public String build() {
         StringBuilder sb = new StringBuilder();
         // package declaration
@@ -42,8 +51,10 @@ public class ClassBuilder {
         sb.append("    private ").append(className).append(" classRef = new ").append(className).append("();\n\n");
 //        sb.append(methods.size());
         // time to add methods
-        for (ExecutableElement method : methods) {
-            sb.append("    @GetMapping(\"/").append(method.getSimpleName()).append("\")\n");
+        for (MethodPackage methodPackage : methods) {
+            ExecutableElement method = methodPackage.getExecutableElement();
+            ExposeMethod exposeMethod = methodPackage.getExposeMethod();
+            sb.append("    @GetMapping(\"/").append(exposeMethod.link()).append("\")\n");
             if (method.getReturnType().toString().equals("void")) {
                 sb.append("    public String ").append(method.getSimpleName()).append("(");
             } else {
@@ -84,13 +95,6 @@ public class ClassBuilder {
 
         sb.append("}\n\n");
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        ClassBuilder cb = new ClassBuilder();
-        cb.setClassName("Main");
-
-        System.out.println(cb.build());
     }
 
 }

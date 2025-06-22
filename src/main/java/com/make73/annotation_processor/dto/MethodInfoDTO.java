@@ -9,6 +9,7 @@ public class MethodInfoDTO implements Serializable {
     private String name;
     private String returnType;
     private String link;
+    private String description;
     private List<ParameterInfoDTO> parameters;
 
     public String getName() {
@@ -41,5 +42,13 @@ public class MethodInfoDTO implements Serializable {
 
     public void setParameters(List<ParameterInfoDTO> parameters) {
         this.parameters = parameters;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

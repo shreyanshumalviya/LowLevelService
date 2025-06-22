@@ -2,10 +2,12 @@ package com.make73.annotation_processor.annotation.processor;
 
 import com.make73.annotation_processor.ClassBuilder;
 import com.make73.annotation_processor.ParentController;
+import com.make73.annotation_processor.annotation.ExposeClass;
 import com.make73.annotation_processor.annotation.ExposeMethod;
 import com.make73.annotation_processor.dto.ControllerInfoDTO;
 import com.make73.annotation_processor.dto.MethodInfoDTO;
 import com.make73.annotation_processor.dto.ParameterInfoDTO;
+import com.make73.annotation_processor.ui.UIController;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -44,29 +46,35 @@ public class ExposeProcessor extends AbstractProcessor {
             // Find elements annotated with MyCustomAnnotation
             for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
                 // Process each element
+                ExposeClass exposeClass = element.getAnnotation(ExposeClass.class);
                 try {
                     JavaFileObject fileObject = filer.createSourceFile("com.make73.annotation_processor." + element.getSimpleName().toString() + "Controller");
                     try (Writer writer = fileObject.openWriter()) {
                         // use ClassBuilder
                         ClassBuilder cb = new ClassBuilder();
                         ControllerInfoDTO controller = new ControllerInfoDTO();
-                        controller.setName("Main");
-                        controller.setLink("Main");
-                        controller.setYear("2024");
-                        controller.setStack("Java");
+
+                        controller.setName(exposeClass.name());
+                        controller.setLink(UIController.PROJECT_BASE_PATH + "/" + exposeClass.link());
+                        controller.setYear(exposeClass.year());
+                        controller.setStack(exposeClass.stack());
+                        controller.setDescription(exposeClass.description());
                         List<MethodInfoDTO> methods = new ArrayList<>();
                         controller.setMethods(methods);
 
                         controllers.add(controller);
-                        cb.setClassName(element.getSimpleName().toString());
+                        cb.setClassName(element.getSimpleName().toString(), exposeClass);
                         // add all methods
                         for (Element method : element.getEnclosedElements()) {
                             // if method has expose annotation
                             if (method.getAnnotation(ExposeMethod.class) != null) {
+                                ExposeMethod exposeMethod = method.getAnnotation(ExposeMethod.class);
                                 // get Method from Element
                                 MethodInfoDTO methodInfoDTO = new MethodInfoDTO();
-                                methodInfoDTO.setName(method.getSimpleName().toString());
-                                methodInfoDTO.setLink("http://localhost:8080/Main/" + method.getSimpleName().toString());
+
+                                methodInfoDTO.setName(exposeMethod.name());
+                                methodInfoDTO.setLink("http://localhost:8080/" + exposeClass.link() + "/" + exposeMethod.link());
+                                methodInfoDTO.setDescription(exposeMethod.description());
 
                                 List<ParameterInfoDTO> parameters = new ArrayList<>();
 
@@ -85,7 +93,7 @@ public class ExposeProcessor extends AbstractProcessor {
                                             parameters.add(parameterInfoDTO);
                                             i++;
                                         }
-                                        cb.addMethod(methodElement);
+                                        cb.addMethod(methodElement, exposeMethod);
                                     }
                                 } catch (Exception e) {
 //                                    writer.write(e.getMessage()+"\n");
