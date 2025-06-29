@@ -1,0 +1,76 @@
+@startuml
+
+class UserManager{
+  List<User> users
+  int addAUser()
+  getUsers()
+  removeUser()
+}
+
+UserManager "1" o-- "*" User
+
+class User{
+  String name
+  int id
+  makeABooking()
+  CancelABooking()
+}
+
+class Theatre{
+  int seats
+  City city
+  addAShow(Movie movie, timing)
+}
+
+class City{
+  String name
+}
+
+
+Theatre *-- City
+
+class TheatreManager{
+  List<Theatre> theatres
+  listShowsInACity()
+  addATheatre(city)
+
+
+}
+
+TheatreManager "1" o-- "*" Theatre
+
+class Movie{
+  int id
+  String name
+}
+
+class MovieManager{
+  List<Movie> movies
+  addMovie()
+  listMovies()
+}
+
+
+class Show{
+  Threatre threatre
+  Movie movie
+  int seats
+  int startTime
+  int endTime
+  List<Booking> bookings
+  int remainingSeats
+}
+Show  *-- Theatre
+Show *-- Movie
+
+class Booking{
+  User user
+  Show show
+
+}
+
+Booking *-- Show
+Booking *-- User
+
+
+@enduml
