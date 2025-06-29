@@ -6,41 +6,62 @@
     <script src="/js/project.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white font-mono p-8">
+<body class="bg-gray-900 text-white font-mono">
 
-<!-- Project Info -->
-<div class="mb-10 max-w-3xl mx-auto">
-    <h1 class="text-4xl font-bold text-green-400 mb-2" th:text="${project.name}">Project Name</h1>
-    <p class="text-lg text-gray-300" th:text="${project.description}">Project description here.</p>
-</div>
+<!-- MAIN CONTAINER: uses page scroll -->
+<div id="main-container" class="flex flex-col md:flex-row">
 
-<!-- Methods List -->
-<div th:each="method, iStat : ${methods}" class="bg-gray-800 p-6 rounded mb-6 shadow max-w-3xl mx-auto">
-    <h2 class="text-2xl text-blue-300 font-semibold mb-1" th:text="${method.name}">Method Name</h2>
-    <p class="text-sm text-gray-400 mb-4" th:text="${method.description}">Method description here.</p>
+    <!-- LEFT (Methods) -->
+    <div id="methods-container" class="w-full md:w-full lg:w-3/5 p-8 transition-all duration-300">
+        <h1 class="text-4xl font-bold text-green-400 mb-4" th:text="${project.name}">Project Name</h1>
+        <p class="text-lg text-gray-300 mb-8" th:text="${project.description}">Project description</p>
 
-    <!-- Form -->
-    <form th:attr="id=${'form-' + iStat.index}"
-          th:onsubmit="'submitForm(event, ' + ${iStat.index} + ')'"
-          class="space-y-3">
+        <div th:each="method, iStat : ${methods}" class="bg-gray-800 p-6 rounded mb-6 shadow">
+            <h2 class="text-2xl text-blue-300 font-semibold mb-1" th:text="${method.name}">Method Name</h2>
+            <p class="text-sm text-gray-400 mb-4" th:text="${method.description}">Method description</p>
 
-        <div th:each="p : ${method.parameters}">
-            <label th:for="${p.key}" class="block text-sm text-gray-400" th:text="${p.name + ' (' + p.type + ')'}"></label>
-            <input th:attr="name=${p.key}, id=${p.key + '-' + iStat.index}"
-                   class="w-full p-2 rounded bg-gray-700 text-white" required />
+            <form th:attr="id=${'form-' + iStat.index}"
+                  th:onsubmit="'submitForm(event, ' + ${iStat.index} + ')'"
+                  class="space-y-3">
+                <div th:each="p : ${method.parameters}">
+                    <label th:for="${p.key}" class="block text-sm text-gray-400"
+                           th:text="${p.name + ' (' + p.type + ')' }"></label>
+                    <input th:attr="name=${p.key}, id=${p.key + '-' + iStat.index}"
+                           class="w-full p-2 rounded bg-gray-700 text-white" required />
+                </div>
+                <button type="submit"
+                        th:attr="data-link=${method.link}, data-index=${iStat.index}"
+                        class="mt-2 bg-green-500 hover:bg-green-400 text-black px-4 py-2 rounded">
+                    Run Method
+                </button>
+            </form>
+
+            <div th:attr="id=${'result-' + iStat.index}" class="mt-4 text-yellow-300 text-sm whitespace-pre-wrap"></div>
         </div>
+    </div>
 
-        <button type="submit"
-                th:attr="data-link=${method.link}, data-index=${iStat.index}"
-                class="mt-2 bg-green-500 hover:bg-green-400 text-black px-4 py-2 rounded">
-            Run Method
+    <!-- RIGHT (JSON VIEWER) -->
+    <div id="json-viewer"
+         class="hidden fixed right-0 top-0 h-full w-full md:w-[40%] bg-gray-900 border-l border-gray-700 overflow-y-auto z-10 p-8">
+        <button onclick="closeJsonView()"
+                class="absolute top-4 right-6 text-red-400 text-xl font-bold hover:text-red-600">
+            ✕
         </button>
-    </form>
+        <h2 class="text-xl font-semibold text-green-300 mb-4">Response</h2>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full text-left text-sm text-white">
+                <thead id="json-headers" class="text-gray-400"></thead>
+                <tbody id="json-body"></tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Output -->
-    <div th:attr="id=${'result-' + iStat.index}" class="mt-4 text-yellow-300 text-sm whitespace-pre-wrap"></div>
 </div>
 
-<a href="/" class="text-blue-400 hover:underline block text-center mt-10">← Back to Projects</a>
+<!-- Back Link -->
+<a href="/" class="block text-center text-blue-400 hover:underline py-4 border-t border-gray-800">
+    ← Back to Projects
+</a>
+
 </body>
 </html>
