@@ -14,6 +14,7 @@ public class Show {
     private List<Booking> bookings;
 
     public Show(int id, Theatre theatre, Movie movie, LocalDateTime startTime) {
+        this.id = id;
         this.theatre = theatre;
         this.movie = movie;
         this.startTime = startTime;

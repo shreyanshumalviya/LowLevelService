@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalShowManager {
-    private static List<Show> shows = new ArrayList<>();
-    ;
-
+    private static final List<Show> shows = new ArrayList<>();
 
     public static Show addShow(Theatre theatre, Movie movie, LocalDateTime startTime) {
         Show show = new Show(shows.size(), theatre, movie, startTime);
