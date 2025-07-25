@@ -73,7 +73,7 @@ public class ExposeProcessor extends AbstractProcessor {
                                 MethodInfoDTO methodInfoDTO = new MethodInfoDTO();
 
                                 methodInfoDTO.setName(exposeMethod.name());
-                                methodInfoDTO.setLink("http://shreyanshu-lld.make73.com/" + exposeClass.link() + "/" + exposeMethod.link());
+                                methodInfoDTO.setLink("https://vawc826h7g.ap-south-1.awsapprunner.com/" + exposeClass.link() + "/" + exposeMethod.link());
                                 methodInfoDTO.setDescription(exposeMethod.description());
 
                                 List<ParameterInfoDTO> parameters = new ArrayList<>();
